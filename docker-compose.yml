@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+  twitter-backend-api:
+    container_name: twitter-backend-api
+    ports:
+      - '3000:3000'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - twitter-backend-api-db
+    restart: on-failure
+    environment:
+      - PORT=3000
+
+      - URL_DATABASE=mongodb://twitter-backend-api-db:27017/twitter
+    volumes:
+      - .:/app
+
+  twitter-backend-api-db:
+    image: mongo
+    container_name: twitter-backend-api-db
+    ports:
+      - '27017:27017'
+    volumes:
+      - twitter-backend-api-db:/date/db
+
+volumes:
+  twitter-backend-api-db:
